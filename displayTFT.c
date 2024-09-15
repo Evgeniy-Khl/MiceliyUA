@@ -36,7 +36,7 @@ void drawButtSkip(unsigned int fW){
     TFT_FillScreen(0, max_X, 0, max_Y, fW);
     initializeButtons(4,1,25);// 4 колонки; одна строка; высота 25
     //---------- фон ------- рамкa --- текст - номер -текст ---------
-    drawButton(BLUE, WHITE, WHITE, 0, "Выход");
+    drawButton(BLUE, WHITE, WHITE, 0, "Вихыд");
     drawButton(GREEN, BLACK, BLACK, 1, "<-");
     drawButton(GREEN, BLACK, BLACK, 2, "->");
     drawButton(MAGENTA, BLACK, BLACK, 3, "Кор.");
@@ -47,8 +47,8 @@ void drawButtEdit(unsigned int fW){
     TFT_FillScreen(0, max_X, 0, max_Y, fW);
     initializeButtons(2,1,25);// 2 колонки; одна строка; высота 25
     //---------- фон ------- рамкa --- текст - номер -текст ---------
-    drawButton(BLUE, WHITE, WHITE, 0, "Отмена");
-    drawButton(MAGENTA, BLACK, BLACK, 1, "Сохран.");
+    drawButton(BLUE, WHITE, WHITE, 0, "Выдмына");
+    drawButton(MAGENTA, BLACK, BLACK, 1, "Збер.");
 }
 
 void displ_0(void){
@@ -60,47 +60,49 @@ void displ_0(void){
     TFT_FillScreen(0, max_X, 0, max_Y, fillWindow);
     initializeButtons(4,1,25);// 4 колонки; одна строка; высота 25
     //---------- фон ------- рамкa --- текст - номер -текст ---------
-    drawButton(fillWindow, fillWindow, bordWindow, 0, "Общие");
+    drawButton(fillWindow, fillWindow, bordWindow, 0, "Загал.");
     drawButton(WHITE, WHITE, BLACK, 1, "Упр.");
     drawButton(WHITE, WHITE, BLACK, 2, "Фаза");
-    drawButton(WHITE, WHITE, BLACK, 3, "Настр");
+    drawButton(WHITE, WHITE, BLACK, 3, "Налаш.");
   }
 //-- СТРОКА 1 ---------------------------
   X_left=5; pointY=5;
   if(timerStop){
     TFT_DrawString("ОСТАНОВ",X_left,pointY,2,0,RED,fillWindow);
-    sprintf(buff,"%3u мин.",timerStop);
+    sprintf(buff,"%3u хвл.",timerStop);
     TFT_DrawString(buff,180,pointY+10,1,1,RED,fillWindow);
   }
   else if(timerDrying){
     TFT_DrawString("ПРОСУШКА",X_left,pointY,2,0,MAGENTA,fillWindow);
-    sprintf(buff,"%3u мин.",timerDrying);
+    sprintf(buff,"%3u хвл.",timerDrying);
     TFT_DrawString(buff,180,pointY+10,1,1,MAGENTA,fillWindow);
   }
   else if(error && (counter1 & 4)){
-    sprintf(buff,"ОШИБКА ");    
+//    sprintf(buff,"ПОМИЛКА ");
+    TFT_DrawString("ПОМИЛКА:",5,pointY,2,0,MAGENTA,fillWindow);    
     switch (error)
      {
-      case 0x01: strcat(buff,"Z1   "); break;// Ошибка датчикa SPOT1
-      case 0x02: strcat(buff,"Z2   "); break;// Ошибка датчикa SPOT2
-      case 0x03: strcat(buff,"Z12  "); break;// Ошибка датчикa SPOT1+SPOT2
-      case 0x04: strcat(buff,"Z3   "); break;// Ошибка датчикa SPOT3
-      case 0x05: strcat(buff,"Z13  "); break;// Ошибка датчикa SPOT1+SPOT3
-      case 0x06: strcat(buff,"Z23  "); break;// Ошибка датчикa SPOT2+SPOT3
-      case 0x07: strcat(buff,"Z123 "); break;// Ошибка датчикa SPOT1+SPOT2+SPOT3
-      case 0x08: strcat(buff,"CO2  "); break;// Ошибка датчикa CO2
-      case 0x10: strcat(buff,"DHT22"); break;// Ошибка датчикa DHT22
-      default:   sprintf(buff,"ОШИБКА! Потеряны ВСЕ датчики");
+      case 0x01: sprintf(buff,"Z1      "); break;// Ошибка датчикa SPOT1
+      case 0x02: sprintf(buff,"Z2      "); break;// Ошибка датчикa SPOT2
+      case 0x03: sprintf(buff,"Z1;Z2   "); break;// Ошибка датчикa SPOT1+SPOT2
+      case 0x04: sprintf(buff,"Z3      "); break;// Ошибка датчикa SPOT3
+      case 0x05: sprintf(buff,"Z1;Z3   "); break;// Ошибка датчикa SPOT1+SPOT3
+      case 0x06: sprintf(buff,"Z2;Z3   "); break;// Ошибка датчикa SPOT2+SPOT3
+      case 0x07: sprintf(buff,"Z1;Z2;Z3"); break;// Ошибка датчикa SPOT1+SPOT2+SPOT3
+      case 0x08: sprintf(buff,"CO2     "); break;// Ошибка датчикa CO2
+      case 0x10: sprintf(buff,"DHT22   "); break;// Ошибка датчикa DHT22
+      default:   sprintf(buff,"Втрачены всы датчики");
      };
-    TFT_DrawString(buff,5,pointY,2,0,MAGENTA,fillWindow);
+    strcat(buff,"       ");
+    TFT_DrawString(buff,165,pointY+10,1,1,MAGENTA,fillWindow);
   }
   else {
     i = sys[0]; x = 0x20; if(ChangeFaza) x=0x21; 
     sprintf(buff,"Фаза-%i %c",i+1,x);
     TFT_DrawString(buff,X_left,pointY,2,0,bordWindow,fillWindow);
     read_clock(CLOCK_BUFFER-1);
-    sprintf(buff,"%2uд.%02xч.%02xм.%02x",dayStage,clock_buffer[2],clock_buffer[1],clock_buffer[0]);//Фаза;дней;час;мин;сек.
-    TFT_DrawString(buff,170,pointY+10,1,1,bordWindow,fillWindow);
+    sprintf(buff,"%2uд. %02xгд.%02xхв.",dayStage,clock_buffer[2],clock_buffer[1]);//Фаза;дней;час;мин;сек.
+    TFT_DrawString(buff,165,pointY+10,1,1,bordWindow,fillWindow);
   }
   if (buttonCheck()) return; //++++ проверим нажатие кнопки +++++++++++++++++++++++++  
   pointY = pointY+35;
@@ -111,19 +113,19 @@ void displ_0(void){
     fraction(temp);     // проверка знака температуры
     inttemp = intval; frctemp = frcval; x = signchar;  
     temp = setpoint.dry; fraction(temp); if(timerDrying) intval += sys[4];// Задание возд.
-    sprintf(buff,"   Воздух: %c%2i.%i [%2i.%i]%c%с",x,inttemp,frctemp,intval,frcval,flags.ratDry,flags.unevenT);
+    sprintf(buff,"  Повытря: %c%2i.%i [%2i.%i]%c%с",x,inttemp,frctemp,intval,frcval,flags.ratDry,flags.unevenT);
     TFT_DrawString(buff,X_left,pointY,1,1,bordWindow,fillWindow);
    }
-  else TFT_DrawString("ОШИБКА датчик воздуха  ",5,pointY,1,1,MAGENTA,fillWindow);            // ОШИБКА
+  else TFT_DrawString("ПОМИЛКА датчик повытря  ",5,pointY,1,1,MAGENTA,fillWindow);            // ОШИБКА
   if (buttonCheck()) return; //++++ проверим нажатие кнопки +++++++++++++++++++++++++
   pointY = pointY+20;
 //----
   x = setpoint.rh; if(timerDrying) x -= sys[2];
   if(pvRH<101){
-    sprintf(buff,"Влажность:  %3i%% [%3i%%]%c",pvRH,x,flags.ratRH);
+    sprintf(buff,"Вологысть:  %3i%% [%3i%%]%c",pvRH,x,flags.ratRH);
     TFT_DrawString(buff,X_left,pointY,1,1,bordWindow,fillWindow);
   }
-  else TFT_DrawString("ОШИБКА датчик влажности",5,pointY,1,1,MAGENTA,fillWindow);  // ОШИБКА
+  else TFT_DrawString("ПОМИЛКА датчик вологосты",5,pointY,1,1,MAGENTA,fillWindow);  // ОШИБКА
   if (buttonCheck()) return; //++++ проверим нажатие кнопки +++++++++++++++++++++++++
   pointY = pointY+20;
 //----------------------------------------------------------------------------------------------------------------------------------------- Компост -----------
@@ -135,7 +137,7 @@ void displ_0(void){
     sprintf(buff,"  Компост: %c%2i.%i [%2i.%i]%c",x,inttemp,frctemp,intval,frcval,flags.ratSoil);
     TFT_DrawString(buff,X_left,pointY,1,1,bordWindow,fillWindow);    
   }
-  else TFT_DrawString("ОШИБКА датчик компоста ",5,pointY,1,1,MAGENTA,fillWindow);            // ОШИБКА
+  else TFT_DrawString("ПОМИЛКА датчик компоста ",5,pointY,1,1,MAGENTA,fillWindow);            // ОШИБКА
   if (buttonCheck()) return; //++++ проверим нажатие кнопки +++++++++++++++++++++++++
   pointY = pointY+20;
 //----------------------------------------------------------------------------------------------------------------------------------------- Датчики компоста --
@@ -158,31 +160,31 @@ void displ_0(void){
 //----------------------------------------------------------------------------------------------------------------------------------------- Воздух ПОДАЧИ -----
   temp = z3[0];                          // датчик зоны 3  z3[]
   fraction(temp);                       // проверка знака температуры
-  if(temp<850){sprintf(buff,"Воздух ПОДАЧИ  %c%2i.%i",signchar,intval,frcval);}
-  else {sprintf(buff,"Воздух ПОДАЧИ ОШИБКА");}// ОШИБКА
+  if(temp<850){sprintf(buff,"Повытря ПОДАЧЫ  %c%2i.%i",signchar,intval,frcval);}
+  else {sprintf(buff,"Повытря ПОДАЧИ  ПОМИЛКА");}// ОШИБКА
   TFT_DrawString(buff,X_left,pointY,1,1,bordWindow,fillWindow);
   if (buttonCheck()) return; //++++ проверим нажатие кнопки +++++++++++++++++++++++++
   pointY = pointY+20;
 //----------------------------------------------------------------------------------------------------------------------------------------- СМЕШАНЫЙ возд. ----  
   temp = z3[1];                          // датчик зоны 3  z3[]
   fraction(temp);                       // проверка знака температуры
-  if(temp<850){sprintf(buff,"СМЕШАНЫЙ возд. %c%2i.%i",signchar,intval,frcval);}
-  else {sprintf(buff,"СМЕШАНЫЙ возд. ОШИБКА");}// ОШИБКА
+  if(temp<850){sprintf(buff,"ЗМЫШАНЕ повытр. %c%2i.%i",signchar,intval,frcval);}
+  else {sprintf(buff,"ЗМЫШАНЕ повытр. ПОМИЛКА");}// ОШИБКА
   TFT_DrawString(buff,X_left,pointY,1,1,bordWindow,fillWindow);
   if (buttonCheck()) return; //++++ проверим нажатие кнопки +++++++++++++++++++++++++
   pointY = pointY+20;
 //----------------------------------------------------------------------------------------------------------------------------------------- НАРУЖНЫЙ возд. ----  
   temp = z3[2];                          // датчик зоны 3  z3[]
   fraction(temp);                       // проверка знака температуры
-  if(temp<850){sprintf(buff,"НАРУЖНЫЙ возд. %c%2i.%i",signchar,intval,frcval);}
-  else {sprintf(buff,"НАРУЖНЫЙ возд. ОШИБКА");}// ОШИБКА
+  if(temp<850){sprintf(buff,"НАРУЖНЕ повытр. %c%2i.%i",signchar,intval,frcval);}
+  else {sprintf(buff,"НАРУЖНЕ повытр. ПОМИЛКА");}// ОШИБКА
   TFT_DrawString(buff,X_left,pointY,1,1,bordWindow,fillWindow);
   if (buttonCheck()) return; //++++ проверим нажатие кнопки +++++++++++++++++++++++++
   pointY = pointY+20;
 //----------------------------------------------------------------------------------------------------------------------------------------- CO2 ---------------  
   temp = setpoint.co2;
   if(CO2module){sprintf(buff,"CO2,ppm [%4i]%c %4i",temp,flags.ratCO2,Tf[3]);}
-  else {sprintf(buff,"CO2,ppm [%4i] ОШИБКА",temp);}// ОШИБКА    
+  else {sprintf(buff,"CO2,ppm [%4i]  ПОМИЛКА",temp);}// ОШИБКА    
   TFT_DrawString(buff,X_left,pointY,1,1,bordWindow,fillWindow);
 }
   
@@ -199,11 +201,11 @@ void displ_1(void)
     TFT_FillScreen(0, max_X, 0, max_Y, fillWindow);
     initializeButtons(4,1,25);// 4 колонки; одна строка; высота 25
     //---------- фон ------- рамкa --- текст - номер -текст ---------
-    drawButton(WHITE, WHITE, BLACK, 0, "Общие");
+    drawButton(WHITE, WHITE, BLACK, 0, "Загал.");
     drawButton(fillWindow, fillWindow, bordWindow, 1, "Упр.");
     drawButton(WHITE, WHITE, BLACK, 2, "Фаза");
-    drawButton(WHITE, WHITE, BLACK, 3, "Настр");
-    TFT_DrawString("ВЫХОДЫ УПРАВЛЕНИЯ",50,pointY,1,1,bordWindow,fillWindow);
+    drawButton(WHITE, WHITE, BLACK, 3, "Налаш.");
+    TFT_DrawString("ВИХОДИ УПРАВЛЫННЯ",50,pointY,1,1,bordWindow,fillWindow);
   }
   pointY = pointY+25;
 //---------------------------- АНАЛОГОВЫЕ ВЫХОДЫ ---------------------------------------------------
@@ -214,13 +216,13 @@ void displ_1(void)
       bordWindow = BLACK;
       switch (flags.vent)
        {
-        case 1: strcat(buff," комп.#"); break;    // определяется регулятором равномерности температуры компоста в фазе "ПОДГОТОВКА" и "ПОСАДКА"
-        case 2: strcat(buff,"CO2 пониж."); break; // определяется регулятором содержания СО2
-        case 3: strcat(buff,"охлаждение"); break;// определяется регулятором для понижения температуры
-        case 4: strcat(buff,"осушение  "); break;// определяется регулятором влажности
-        case 5: strcat(buff,"нагрев    "); break;// определяется Положением клапана горячей воды.
-        case 6: strcat(buff,"охлаждение"); break;// определяется Положением клапана холодной воды.
-        default: strcat(buff,"задано MIN");// Зад. MIN
+        case 1: strcat(buff, " комп.#"); break;    // определяется регулятором равномерности температуры компоста в фазе "ПОДГОТОВКА" и "ПОСАДКА"
+        case 2: strcat(buff, "CO2 поныж"); break; // определяется регулятором содержания СО2
+        case 3: strcat(buff, "охолодж. "); break;// определяется регулятором для понижения температуры
+        case 4: strcat(buff, "осушення "); break;// определяется регулятором влажности
+        case 5: strcat(buff, "нагрыв   "); break;// определяется Положением клапана горячей воды.
+        case 6: strcat(buff, "охолодж. "); break;// определяется Положением клапана холодной воды.
+        default: strcat(buff,"задан MIN");// Зад. MIN
        };
   }
   else bordWindow = RED;
@@ -234,10 +236,10 @@ void displ_1(void)
       bordWindow = BLACK;
       switch (flags.flap)
        {
-        case 1: strcat(buff,"CO2 пониж."); break;  // определяется регулятором содержания СО2
-        case 2: strcat(buff,"охлаждение"); break;// определяется регулятором для понижения температуры
-        case 3: strcat(buff,"осушение  "); break;// определяется регулятором влажности   
-        default: strcat(buff,"задано MIN");// Зад. MIN
+        case 1: strcat(buff, "CO2 поныж"); break;  // определяется регулятором содержания СО2
+        case 2: strcat(buff, "охолодж. "); break;// определяется регулятором для понижения температуры
+        case 3: strcat(buff, "осушення "); break;// определяется регулятором влажности   
+        default: strcat(buff,"задан MIN");// Зад. MIN
        };
   }
   else bordWindow = RED;
@@ -249,9 +251,9 @@ void displ_1(void)
   sprintf(buff,"%14s %3i%% ",setKoff[3],temp);// Кран Гор.воды
   if(autoA[2]==-1){ 
       bordWindow = BLACK;
-      if(flags.freez){strcat(buff,"ЗАЩИТА ** ");}   // Угроза замораживания !!!
-      else if(temp>0){strcat(buff,"нагрев    ");}// определяется регулятором для повышения температуры
-      else {strcat(buff,"задано MIN");}// Зад. MIN
+      if(flags.freez){strcat(buff,"ЗАХИСТ **");}   // Угроза замораживания !!!
+      else if(temp>0){strcat(buff,"нагрыв   ");}// определяется регулятором для повышения температуры
+      else {strcat(buff,          "задан MIN");}// Зад. MIN
   }
   else bordWindow = RED;
   TFT_DrawString(buff,5,pointY,1,1,bordWindow,fillWindow);
@@ -263,9 +265,9 @@ void displ_1(void)
       bordWindow = BLACK;
       switch (flags.cold)
        {
-        case 1: strcat(buff,"охлаждение"); break;// определяется регулятором для понижения температуры
-        case 2: strcat(buff,"осушение  "); break;// определяется регулятором влажности   
-        default: strcat(buff,"задано MIN");// Зад. MIN
+        case 1: strcat(buff, "охолодж. "); break;// определяется регулятором для понижения температуры
+        case 2: strcat(buff, "осушення "); break;// определяется регулятором влажности   
+        default: strcat(buff,"задан MIN");// Зад. MIN
        };
   }
   else bordWindow = RED;
@@ -274,7 +276,7 @@ void displ_1(void)
   pointY = pointY+20;
 //---------------------------- РЕЛЕЙНЫЕ ВЫХОДЫ ---------------------------------------------------
   for (i=0;i<4;i++){
-    sprintf(buff,"%10s: ", nameD[i]); 
+    sprintf(buff,"%12s: ", nameD[i]); 
     switch (autoD[i]){
       case -1: strcat(buff,"АВТ"); bordWindow = BLACK; break;
       case 1: strcat(buff,"ON "); bordWindow = RED; break;
@@ -284,7 +286,7 @@ void displ_1(void)
     x = 1<<i; 
     if (relay&x) color_box=YELLOW;
     else color_box=BLACK;
-    TFT_FillRectangle(170,pointY,25,18,color_box);
+    TFT_FillRectangle(200,pointY,25,18,color_box);
     if (buttonCheck()) return; //++++ проверим нажатие кнопки +++++++++++++++++++++++++
     pointY = pointY+20;
   };
@@ -318,7 +320,7 @@ void displ_3(void){
   pointY=7;
   if (newSetButt){
     drawButtSkip(fillWindow);
-    TFT_DrawString("НАСТРОЙКИ СИСТЕМЫ",50,pointY,1,1,bordWindow,fillWindow); //---------------------------------------- НАСТРОКИ СИСТЕМЫ -
+    TFT_DrawString("НАЛАШТУВАННЯ СИСТЕМИ",50,pointY,1,1,bordWindow,fillWindow); //---------------------------------------- НАСТРОКИ СИСТЕМЫ -
   }
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   pointY = pointY+25;
@@ -342,7 +344,7 @@ void displ_4(void){
     drawButtEdit(fillWindow);
     initializePlus(pointY+25, 4, 30);
     for (item=0;item<plusCount;item++) drawPlus(item, fillWindow);
-    sprintf(buff,"ЗАДАНИЯ ФАЗЫ %u", fz+1);
+    sprintf(buff,"ЗАВДАННЯ ФАЗИ %u", fz+1);
     TFT_DrawString(buff,50,pointY,1,1,bordWindow,fillWindow);  //---------------------------------------- ЗАДАНИЯ ФАЗЫ -
   }
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -377,7 +379,7 @@ void displ_5(void){
     drawButtEdit(fillWindow);
     initializePlus(pointY+25, 4, 30);
     for (item=0;item<plusCount;item++) drawPlus(item, fillWindow);
-    sprintf(buff,"ДИНАМИКА ФАЗЫ %u изм. за час", fz+1);
+    sprintf(buff,"ДИНАМЫКА ФАЗИ %u изм. за час", fz+1);
     TFT_DrawString(buff,20,pointY,1,1,bordWindow,fillWindow);   //---------------------------------------- ДИНАМИКА ФАЗЫ -
   }
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -412,7 +414,7 @@ void displ_6(void){
     drawButtEdit(fillWindow);
     initializePlus(pointY+25, 4, 30);
     for (item=0;item<plusCount;item++) drawPlus(item, fillWindow);
-    sprintf(buff,"РАЗРЕШЕНИЯ ФАЗЫ %u", fz+1);
+    sprintf(buff,"ДОЗВІЛИ ФАЗИ %u", fz+1);
     TFT_DrawString(buff,50,pointY,1,1,bordWindow,fillWindow);   //---------------------------------------- РАЗРЕШЕНИЯ ФАЗЫ -
   }
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -439,7 +441,7 @@ void displ_7(void){
     drawButtEdit(fillWindow);
     initializePlus(pointY+25, 4, 30);
     for (item=0;item<plusCount;item++) drawPlus(item, fillWindow);
-    TFT_DrawString("УПРАВЛЕНИЕ А",50,pointY,1,1,bordWindow,fillWindow);   //---------------------------------------- УПРАВЛЕНИЕ А -
+    TFT_DrawString("УПРАВЛЫННЯ А",50,pointY,1,1,bordWindow,fillWindow);   //---------------------------------------- УПРАВЛЕНИЕ А -
   }
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   pointY = pointY+30;
@@ -471,7 +473,7 @@ void displ_8(void){
     drawButtEdit(fillWindow);
     initializePlus(pointY+25, 4, 30);
     for (item=0;item<plusCount;item++) drawPlus(item, fillWindow);
-    TFT_DrawString("УПРАВЛЕНИЕ D",50,pointY,1,1,bordWindow,fillWindow);   //---------------------------------------- УПРАВЛЕНИЕ D -
+    TFT_DrawString("УПРАВЛЫННЯ D",50,pointY,1,1,bordWindow,fillWindow);   //---------------------------------------- УПРАВЛЕНИЕ D -
   }
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   pointY = pointY+30;
@@ -486,7 +488,7 @@ void displ_8(void){
     temp = newval[item]; 
     sprintf(buff,"%14s ", nameD[item]);
     if(temp==-1) strcat(buff,"АВТ.");
-    else if(temp==0) strcat(buff,"ОТКЛ");
+    else if(temp==0) strcat(buff,"ВІДКЛ");
     else strcat(buff,"ВКЛ.");
     TFT_DrawString(buff,X_left,pointY,1,1,bordWindow,fillWindow);
     if(x) {item--; delay_ms(pauseButt); pauseButt -= 100; if(pauseButt<0) pauseButt=1;}
@@ -504,7 +506,7 @@ void displ_9(void){
     drawButtEdit(fillWindow);
     initializePlus(pointY+25, 3, 30);
     for (item=0;item<plusCount;item++) drawPlus(item, fillWindow);
-    TFT_DrawString("СПЕЦИВЛЬНЫЕ УСТАНОВКИ",50,pointY,1,1,bordWindow,fillWindow);   //---------------------------------------- СПЕЦИВЛЬНЫЕ УСТАНОВКИ -
+    TFT_DrawString("СПЕЦЫАЛЬНЫ УСТАНОВКИ",50,pointY,1,1,bordWindow,fillWindow);   //---------------------------------------- СПЕЦИВЛЬНЫЕ УСТАНОВКИ -
   }
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   pointY = pointY+30;
@@ -530,7 +532,7 @@ void displ_10(void){
     drawButtEdit(fillWindow);
     initializePlus(pointY+25, 5, 30);
     for (item=0;item<plusCount;item++) drawPlus(item, fillWindow);
-    TFT_DrawString("СПЕЦИВЛЬНЫЕ УСТАНОВКИ",50,pointY,1,1,bordWindow,fillWindow);   //---------------------------------------- СПЕЦИВЛЬНЫЕ УСТАНОВКИ -
+    TFT_DrawString("СПЕЦЫАЛЬНЫ УСТАНОВКИ",50,pointY,1,1,bordWindow,fillWindow);   //---------------------------------------- СПЕЦИВЛЬНЫЕ УСТАНОВКИ -
   }
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   pointY = pointY+30;
@@ -630,8 +632,8 @@ void displ_13(void){
     if(x) newval[item] = newval[item] + x;
     temp = newval[item];
     switch (item){
-        case 0: sprintf(buff," ВКЛЮЧИТЬ= %3u%%", temp); break;
-        case 1: sprintf(buff,"ОТКЛЮЧИТЬ= %3u%%", temp); break;   
+        case 0: sprintf(buff," УВЫМКНУТИ= %3u%%", temp); break;
+        case 1: sprintf(buff,"ВІДКЛЮЧИТИ= %3u%%", temp); break;   
     }; 
     TFT_DrawString(buff,X_left,pointY,1,1,bordWindow,fillWindow);
     if(x) {item--; delay_ms(pauseButt); pauseButt -= 100; if(pauseButt<0) pauseButt=1;}
@@ -747,19 +749,24 @@ void displ_18(void){
   pointY=7;
   if (newSetButt){
     drawButtSkip(fillWindow);
-    TFT_DrawString(setKoff[6],50,pointY,1,1,bordWindow,fillWindow); //---------------------------------------- Датчики -
+    TFT_DrawString(setKoff[7],50,pointY,1,1,bordWindow,fillWindow); //---------------------------------------- Датчики -
   }
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   pointY = pointY+30;
   X_left = 20;
   devices = w1_search(0xf0,rom_code);
-  sprintf(buff,"Датчиков температуры %u",devices);
+  sprintf(buff,"Датчикыв температури %u",devices);
   TFT_DrawString(buff,X_left,pointY,1,1,color_txt,color_fon);
   pointY = pointY+30;
   X_left = 40;
   for (item = 0; item < 3; item++){
     if (item<2) sprintf(buff,"%s", nameFaza[item]);
-    else sprintf(buff,"%s", setFaza[6]);    
+    else sprintf(buff,"%s", nameFaza[MAX_FAZA_SET]);
+    switch (item){
+    case 0: strcat(buff, ": 2 шт."); break;
+    case 1: strcat(buff, ": не быльще 4 шт."); break;
+    case 2: strcat(buff, ": не быльще 3 шт."); break;
+    }; 
     if (item == numMenu){color_txt = WHITE; color_fon = BLACK;} else {color_txt = BLACK; color_fon = YELLOW1;}
     TFT_DrawString(buff,X_left,pointY,1,1,color_txt,color_fon);
     pointY = pointY+20;

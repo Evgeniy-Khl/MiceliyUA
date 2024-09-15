@@ -74,7 +74,7 @@ TFT_FillScreen(0, max_X, 0, max_Y, fillScreen);
 pointY = 2;
 sprintf(buff,"www.graviton.com.ua"); TFT_DrawString(buff,70,pointY,1,1,WHITE,fillScreen);
 pointY = pointY+30;
-sprintf(buff,"МИЦЕЛИЙ"); TFT_DrawString(buff,40,pointY,2,0,WHITE,fillScreen);  TFT_DrawString("v3.0.0",200,pointY+10,1,1,WHITE,fillScreen);
+sprintf(buff,"МЫЦЕЛЫЙ"); TFT_DrawString(buff,40,pointY,2,0,WHITE,fillScreen);  TFT_DrawString("v3.0.0",200,pointY+10,1,1,WHITE,fillScreen);
 pointY = pointY+60;
 //------ detect модуль CO2 ---------------------------------------------------------    
 //for (i=0; i<3; i++)
@@ -99,9 +99,9 @@ else pvRH = tableRH(z1[0], z1[1]);     // психрометрический датчик
 sprintf(buff,"%02x.%02x.%02xг.%02x:%02x:%02x  R=%2x",clock_buffer[4],clock_buffer[5],clock_buffer[6],clock_buffer[2],clock_buffer[1],clock_buffer[0],clock_buffer[7]);
 TFT_DrawString(buff,40,pointY,1,1,WHITE,fillScreen);
 pointY = pointY+20;
-sprintf(buff,"Датчиков температуры %u",x); TFT_DrawString(buff,40,pointY,1,1,WHITE,fillScreen); // количество датчиков
+sprintf(buff,"Датчикыв температури %u",x); TFT_DrawString(buff,40,pointY,1,1,WHITE,fillScreen); // количество датчиков
 pointY = pointY+20;
-sprintf(buff,"Датчик влажности %u",Dht); TFT_DrawString(buff,40,pointY,1,1,WHITE,fillScreen); // датчик AM2301
+sprintf(buff,"Датчик вологосты %u",Dht); TFT_DrawString(buff,40,pointY,1,1,WHITE,fillScreen); // датчик AM2301
 pointY = pointY+20;
 sprintf(buff,"Датчик CO2 %u",CO2module); TFT_DrawString(buff,40,pointY,1,1,WHITE,fillScreen); // датчик углекислого газа
 pointY = pointY+20;

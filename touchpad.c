@@ -291,8 +291,12 @@ void touchpad(char byte){
         case 18: //--------------------------------------------------- Õ¿—“–Œ » —»—“≈Ã€ <Œ·˘ËÈ ÒÔËÒÓÍ> ------------------------------------------------------
           switch (byte){
             case 0: displ_num = 0; newSetButt = 1; break;
-            case 1: if (--numMenu<0) numMenu = 2;    break;
-            case 2: if (++numMenu>2) numMenu = 0;    break;
+            case 1: if (--numMenu<0) numMenu = 2;
+                    TFT_DrawString("        ",20,bottom_Y-40,2,0,YELLOW1,YELLOW1);
+                break;
+            case 2: if (++numMenu>2) numMenu = 0;
+                    TFT_DrawString("        ",20,bottom_Y-40,2,0,YELLOW1,YELLOW1);
+                break;
             case 3: 
                    switch (numMenu){
                         case 0:
@@ -319,10 +323,10 @@ void touchpad(char byte){
                         for (byte=0; byte<7; byte++) *ptr_to_eeprom++ = *ptr_to_ram++;
                         ptr_to_ram++;// ÔÓÔÛÒÍ‡ÂÏ 0h
                      };
-                     TFT_DrawString("«¿œ»—¿Õ€",20,bottom_Y-40,2,0,BLACK,GREEN1);
+                     TFT_DrawString("«¿œ»—¿Õ»",20,bottom_Y-40,2,0,BLACK,GREEN1);
                    }
                    else {
-                     TFT_DrawString("Œÿ»¡ ¿",20,bottom_Y-40,2,0,RED,YELLOW);
+                     TFT_DrawString("œŒÃ»À ¿",20,bottom_Y-40,2,0,RED,YELLOW);
                    }; 
             break;
           }
